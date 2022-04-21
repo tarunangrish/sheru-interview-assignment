@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Sheru Iot Device Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link href="pricing.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ==" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8">
+    
+        $(document).ready(function() {
+            // Connect to the Socket.IO server.
+            // The connection URL has the following format, relative to the current page:
+            //     http[s]://<domain>:<port>[/<namespace>]
+            var socket = io();
+            // Event handler for server sent data.
+            // The callback function is invoked whenever the server emits data
+            // to the client. The data is then displayed in the "Received"
+            // section of the page.
+            socket.on('PVAlerts', function(msg, cb) {
+                $("#PackageVoltageAlert").attr("class","w-100 btn btn-lg btn-danger")
+                if (cb)
+                    cb();
+            });
+            socket.on('CBAlerts', function(msg, cb) {
+                // $('#log').append('<br>' + $('<div/>').text(msg.type + ': ' + msg.data).html());
+                $('#CurentVoltageAlert').attr("class","w-100 btn btn-lg btn-danger")
+                if (cb)
+                    cb();
+            });
+            socket.on('BBAlerts', function(msg, cb) {
+                $('#BatteryVoltageAlert').attr("class","w-100 btn btn-lg btn-danger")
+                if (cb)
+                    cb();
+            });
+            socket.on('ResetClassesForVoltage', function(msg, cb) {
+                $("#PackageVoltageAlert").attr("class","w-100 btn btn-lg btn-outline-success")
+                if (cb)
+                    cb();
+            });
+            socket.on('ResetClassesForCurrent', function(msg, cb) {
+                $("#CurentVoltageAlert").attr("class","w-100 btn btn-lg btn-outline-success")
+                if (cb)
+                    cb();
+            });
+            socket.on('ResetClassesForBattery', function(msg, cb) {
+                $("#BatteryVoltageAlert").attr("class","w-100 btn btn-lg btn-outline-success")
+                if (cb)
+                    cb();
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container py-3">
+        <header>
+          <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+            <h1 class="display-4 fw-normal">IOT Alerts</h1>
+            <p class="fs-5 text-muted">This page will show the alerts of the IOT Device.</p>
+          </div>
+        </header>
+        <main>
+          <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+            <div class="col">
+              <div class="card mb-4 rounded-3 shadow-sm">
+                <div class="card-header py-3">
+                  <h4 class="my-0 fw-normal">Package Voltage</h4>
+                </div>
+                <div class="card-body">
+                  <h4 class="card-title pricing-card-title">This field will show us when the received value will increase than 100.</h4>
+                  <ul class="list-unstyled mt-3 mb-4">
+                    <li>Package Voltage Alert Section</li>
+                  </ul>
+                  <button type="button" class="w-100 btn btn-lg btn-outline-success" id="PackageVoltageAlert">Package Voltage Breach</button>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card mb-4 rounded-3 shadow-sm">
+                <div class="card-header py-3">
+                  <h4 class="my-0 fw-normal">Current</h4>
+                </div>
+                <div class="card-body">
+                  <h4 class="card-title pricing-card-title">This field will show us when the received value will drop lower than 0 (go negative).</h4>
+                  <ul class="list-unstyled mt-3 mb-4">
+                    <li>Current Breach Alert Section</li>
+                  </ul>
+                  <button type="button" class="w-100 btn btn-lg btn-outline-success" id="CurentVoltageAlert">Current Voltage Breach</button>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card mb-4 rounded-3 shadow-sm">
+                <div class="card-header py-3">
+                  <h4 class="my-0 fw-normal">Battery</h4>
+                </div>
+                <div class="card-body">
+                  <h4 class="card-title pricing-card-title">This field will show us when the received value will frop lower than 20.</h4>
+                  <ul class="list-unstyled mt-3 mb-4">
+                    <li>Battery Voltage Alert Section</li>
+                  </ul>
+                  <button type="button" class="w-100 btn btn-lg btn-outline-success" id="BatteryVoltageAlert">Battery Voltage Breach</button>
+                </div>
+              </div>
+            </div>
+          </div> 
+</body>
+</html>
